@@ -1,0 +1,25 @@
+// Global Zed tasks. See https://zed.dev/docs/tasks
+[
+  {
+    // Spawned by the toolbar run button, F5 (keymap.json), and the gutter run icons
+    // tagged below (C/C++ main, Python __main__, Rust main, Go main, shell scripts).
+    // run-file.ps1 reads the file from $env:ZED_FILE, so no path is passed here.
+    "label": "Run current file",
+    "command": "& 'C:\\Users\\Ahad\\AppData\\Roaming\\Zed\\run-file.ps1'; exit $LASTEXITCODE",
+    "shell": {
+      "with_arguments": {
+        "program": "powershell.exe",
+        "args": ["-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass"]
+      }
+    },
+    "cwd": "$ZED_DIRNAME",
+    "save": "all",
+    "reveal": "always",
+    "hide": "never",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "show_command": false,
+    "show_summary": true,
+    "tags": ["cpp-main", "c-main", "python-module-main-method", "rust-main", "go-main", "bash-script"]
+  }
+]

@@ -1,0 +1,46 @@
+diff --git a/crates/zed/src/zed/quick_action_bar.rs b/crates/zed/src/zed/quick_action_bar.rs
+index 42e3d7e..9397c34 100644
+--- a/crates/zed/src/zed/quick_action_bar.rs
++++ b/crates/zed/src/zed/quick_action_bar.rs
+@@ -33,6 +33,8 @@ use workspace::{
+ use zed_actions::{agent::AddSelectionToThread, assistant::InlineAssist, outline::ToggleOutline};
+ 
+ const MAX_CODE_ACTION_MENU_LINES: u32 = 16;
++/// Label of the user task (in the global tasks.json) that the run button spawns.
++const RUN_CURRENT_FILE_TASK: &str = "Run current file";
+ 
+ pub struct QuickActionBar {
+     _inlay_hints_enabled_subscription: Option<Subscription>,
+@@ -160,6 +162,24 @@ impl Render for QuickActionBar {
+             )
+         });
+ 
++        let run_button = (editor.buffer_kind(cx) == ItemBufferKind::Singleton).then(|| {
++            let run_current_file = || zed_actions::Spawn::ByName {
++                task_name: RUN_CURRENT_FILE_TASK.to_string(),
++                reveal_target: None,
++            };
++            QuickActionBarButton::new(
++                "run current file",
++                IconName::PlayFilled,
++                false,
++                Box::new(run_current_file()),
++                focus_handle.clone(),
++                "Run Current File",
++                move |_, window, cx| {
++                    window.dispatch_action(Box::new(run_current_file()), cx);
++                },
++            )
++        });
++
+         let assistant_button = QuickActionBarButton::new(
+             "toggle inline assistant",
+             IconName::ZedAssistant,
+@@ -706,6 +726,7 @@ impl Render for QuickActionBar {
+         h_flex()
+             .id("quick action bar")
+             .gap(DynamicSpacing::Base01.rems(cx))
++            .children(run_button)
+             .children(self.render_repl_menu(cx))
+             .children(self.render_preview_button(cx))
+             .children(search_button)

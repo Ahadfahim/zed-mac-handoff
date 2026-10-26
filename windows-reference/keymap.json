@@ -1,0 +1,10 @@
+// Zed keybindings. See https://zed.dev/docs/key-bindings
+[
+  {
+    // F5 runs the current file; while paused in the debugger it still means Continue.
+    "context": "Workspace && !debugger_stopped",
+    "bindings": {
+      "f5": ["task::Spawn", { "task_name": "Run current file" }]
+    }
+  }
+]
